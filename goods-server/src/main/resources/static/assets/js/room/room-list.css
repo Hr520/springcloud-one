@@ -1,0 +1,52 @@
+table.dataTable thead > tr > th:first-child {
+    padding-right: 0px;
+}
+table.dataTable thead > tr > th:last-child {
+    padding-right: 0px;
+}
+/* fixed的表格才可以使单元格显示省略号*/
+.ellipsis-table {
+    table-layout:fixed;
+}
+/* 超长文字单元格省略号显示 */
+.ellipsis{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+/* 表格复选框单元格居中显示 */
+/*.ellipsis-table {
+    text-align:center;
+}*/
+
+/* 表格操作栏按钮居中 */
+.ellipsis-table .td-operation {
+    text-align : center;
+}
+/* 表格操作栏按钮间隔 */
+.ellipsis-table .td-operation .btn + .btn {
+    margin-bottom: 0;
+    margin-left: 5px;
+}
+
+/*
+.btn-info {
+    color: #fff;
+    background-color: #3498db;
+    border-color: #3498db;
+}
+.btn-info:hover {
+    color: #fff;
+    background-color: #217dbb;
+    border-color: #2077b2;
+}
+
+.btn-info {
+    background-color: #00c0ef;
+    border-color: #00acd6
+}
+
+.btn-info:hover, .btn-info:active, .btn-info.hover {
+    background-color: #00acd6
+}*/

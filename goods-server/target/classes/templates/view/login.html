@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>有味收银系统</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/css/form-elements.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="shortcut icon" href="/assets/ico/favicon.png">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrapValidator.css">
+    <link rel="stylesheet" href="/assets/css/reveal.css">
+</head>
+<body style="overflow:scroll;">
+<!-- Top content -->
+<div class="top-content">
+    <div class="inner-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2 text">
+                    <h1>
+                        <strong>有味超市收银系统</strong>
+                    </h1>
+                     <div class="description">
+                    <a href="javascript:void(0);"><strong></strong></a>
+                </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 form-box">
+                    <div class="form-top">
+                        <div class="form-top-left">
+                            <h3>输入您的用户名和密码登录:</h3>
+                        </div>
+                        <div class="form-top-right">
+                            <i class="fa fa-key"></i>
+                        </div>
+                    </div>
+                    <div class="form-bottom" style="background: #fff;">
+                        <form id="form_login" role="form" action="#" method="post" class="login-form">
+                            <small style="color: #a94442;display: none;" id="errorMsg"></small>
+                         <!--   <input type="hidden" name="alertmsg" id="alertmsg" value="${pd.alermg}">-->
+                            <div class="form-group has-feedback">
+                                <input type="text" name="userName" autocomplete="off" placeholder="用户名..." class="form-control" id="form-username">
+                                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <input type="text" name="pad" onblur="check(this.value);" onfocus="this.type='password'"	autocomplete="off" placeholder="密码..."  class="form-control" id="form-password">
+                                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <input name="jg_login_verify" type="text" class="form-control" id="validCode" placeholder="请输入验证码"/>
+                                    </div>
+                                    <div class="col-xs-6 text-right">
+                                        <img id="img_verify" style="max-width:100%;cursor:pointer;" src="code" onclick="javascript:this.src='code?t='+Math.random()"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn">登录</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 social-login">
+                    <p class="new_student" style="position:relative;color: #d8d8d8;">360浏览器请使用极速模式</p>
+                       <!-- <a href="javascript:" id="aclick" style="color: #fff;">(如何使用?)
+                            <span class="b_360" style="left: -50px;position: absolute;top: -165px;display: none"> <img src="dist/img/open360.png" height="170"> </span>
+                        </a>-->
+                        建议浏览器
+                        <img src="dist/img/IE.png" width="20" height="20">IE10+</a>
+                        <a class="firefox_pic" style="color: #fff;" target="_blank" href="http://www.firefox.com.cn/download/">
+                            <img src="../../dist/img/Firefox.png" width="20" height="20">火狐</a>
+                        <a class="google_pic" style="color: #fff;"  target="_blank" href="https://www.google.cn/intl/zh-CN/chrome/">
+                            <img src="../../dist/img/google.png" width="20" height="20">谷歌</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框（Modal） -->
+<div id="myModal" class="reveal-modal" style="display: none; top: 220px; background:#f39c12;">
+    <h2 style="color:#fff;">温馨提示</h2>
+    <p style="color:#fff;">您正在使用的浏览器版本过低，为了更好的体验建议浏览器：IE10+火狐+谷歌！</p>
+    <a class="close-reveal-modal" id="close" style="color:#fff;">&#215;</a>
+</div>
+<!-- JS -->
+
+<script src="../assets/js/jquery-1.11.1.min.js"></script>
+<script src="../assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="../assets/js/jquery.backstretch.min.js"></script>
+<script src="../assets/js/scripts.js"></script>
+<script src="../bootstrap/js/bootstrapValidator.js"></script>
+<script src="../assets/js/aes.js"></script>
+<script src="../assets/js/md5.js"></script>
+<script type="text/javascript">
+    window.onload = function() {
+        var t = document.getElementById('form-username');
+        t.focus();
+        t.select();
+    }
+
+    var BrowserMatch = {
+        init: function () {
+            this.browser = this.getBrowser().browser || "An Unknown Browser";
+            this.version = this.getBrowser().version || "An Unknown Version";
+            this.OS = this.getOS() || "An Unknown OS";
+        },
+        getOS:function(){
+            if(navigator.platform.indexOf("Win")!= -1) return "Windows";
+            if(navigator.platform.indexOf("Mac")!= -1) return "Mac";
+            if(navigator.platform.indexOf("Linux")!= -1) return "Linux";
+            if(navigator.userAgent.indexOf("iPhone")!= -1) return "iPhone/iPod";
+        },
+        getBrowser:function () {
+            var rMsie = /(msie\s|trident\/7)([\w\.]+)/;
+            var rTrident = /(trident)\/([\w.]+)/;
+            var rFirefox = /(firefox)\/([\w.]+)/;
+            var rOpera = /(opera).+version\/([\w.]+)/;
+            var rNewOpera = /(opr)\/(.+)/;
+            var rChrome = /(chrome)\/([\w.]+)/;
+            var rSafari = /version\/([\w.]+).*(safari)/;
+            var ua = navigator.userAgent.toLowerCase();
+            var matchBS,matchBS2;
+            matchBS = rMsie.exec(ua);
+            if (matchBS != null) {
+                matchBS2 = rTrident.exec(ua);
+                if (matchBS2 != null){
+                    switch (matchBS2[2]){
+                        case "4.0": return { browser : "IE", version : "8" };break;
+                        case "5.0": return { browser : "IE", version : "9" };break;
+                        case "6.0": return { browser : "IE", version : "10" };break;
+                        case "7.0": return { browser : "IE", version : "11" };break;
+                        default:return { browser : "IE", version : "Undefined" };
+                    }
+                }else{
+                    return {browser : "IE", version : matchBS[2] || "0" };
+                }
+            }
+            matchBS = rFirefox.exec(ua);
+            if ((matchBS != null)&&(!(window.attachEvent))&&(!(window.chrome))&&(!(window.opera))) {
+                return { browser : matchBS[1] || "", version : matchBS[2] || "0" };
+            }
+            matchBS = rOpera.exec(ua);
+            if ((matchBS != null)&&(!(window.attachEvent))) {
+                return { browser : matchBS[1] || "", version : matchBS[2] || "0" };
+            }
+            matchBS = rChrome.exec(ua);
+            if ((matchBS != null)&&(!!(window.chrome))&&(!(window.attachEvent))) {
+                matchBS2 = rNewOpera.exec(ua);
+                if(matchBS2 == null){
+                    return { browser : matchBS[1] || "", version : matchBS[2] || "0" };
+                }else{
+                    return { browser : "Opera", version : matchBS2[2] || "0" };
+                }
+            }
+            matchBS = rSafari.exec(ua);
+            if ((matchBS != null)&&(!(window.attachEvent))&&(!(window.chrome))&&(!(window.opera))) {
+                return { browser : matchBS[2] || "", version : matchBS[1] || "0" };
+            }
+        }
+    };
+    BrowserMatch.init();
+    $(function () {
+        var  iEversion=BrowserMatch.version;
+        var  iEName=BrowserMatch.browser;
+        var version = parseInt(iEversion,10);
+        if(iEName =='IE' && version < 9){
+            $("#ll").attr({"disabled":"disabled"});
+            $("#validCode").attr({"disabled":"disabled"});
+            $("#form-password").attr({"disabled":"disabled"});
+            $("#form-username").attr({"disabled":"disabled"});
+            $("#myModal").show();
+        }
+
+
+        $("#close").click(function() {
+            $("#myModal").hide();
+        });
+        $('form').bootstrapValidator({
+            message: '无效数据',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                userName: {
+                    message: '用户名验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        }
+                    }
+                },
+                pad: {
+                    message: '密码无效',
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 16,
+                            message: '密码长度必须在6到16之间'
+                        }
+                    }
+                },
+                jg_login_verify: {
+                    message: '验证码无效',
+                    validators: {
+                        notEmpty: {
+                            message: '验证码不能为空'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9]{4}$/,
+                            message: '验证码由4位数字或字母组成'
+                        }
+                    }
+                }
+            }
+        }).on('success.form.bv', function (e) {
+            e.preventDefault();
+            var $form = $(e.target);
+            var bv = $form.data('bootstrapValidator');
+            username=$("#form-username").val();
+            var  pds=$("#form-password").val();
+            var code = username+",coco,"+pds+",coco,"+$("#validCode").val();
+            $.ajax({
+                type:"POST",
+                url: "userLogin/toLogin",
+                data:{"data": code},
+                dataType:"JSON",
+                async: false,
+                success: function (data) {
+                        if ("success" == data.data){
+                            window.location.href=window.location.href.split("/")[0]+"/home";
+                        }else {
+                            $("#errorMsg").text(data.msg).show();
+                            if ("codeerror" == data.data) {
+                                var t = document.getElementById('validCode');
+                                t.focus();
+                                t.select();
+                            } else {
+                                var t = document.getElementById('form-username');
+                                t.focus();
+                                t.select();
+                            }
+                            alert(2)
+                        }
+                }
+            });
+        });
+    });
+    function open(){
+        document.getElementById(tanchu).style.display="";  //显示
+    }
+    function close(){
+        document.getElementById(tanchu).style.display="none";  //不显示（页面初始化的时候同样加载一遍）
+    }
+</script>
+<script type="text/javascript">
+ /*   window.onload=function(){
+        var msg=$("#alertmsg").val();
+        if(msg==""){
+        }else{
+            alert(msg);
+        }
+    }*/
+
+    function  check(value){
+        $("#pd").val(value);
+    }
+</script>
+<script type="text/javascript">
+    $("#aclick").mouseover(function(){
+        $(".b_360").show();
+    });
+    $("#aclick").mouseout(function(){
+        $(".b_360").hide();
+    });
+</script>
+</body>
+</html>

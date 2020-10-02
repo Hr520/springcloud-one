@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <base th:href="${#request.getContextPath()}+'/'">
+    <title>公共页面</title>
+</head>
+<body>
+    <div th:fragment="Header">
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="javascript:void(0);" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini">收银</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg">有味收银系统</span>
+            </a>
+            <!-- 头部导航 -->
+            <nav class="navbar navbar-static-top">
+                <!-- 切换导航-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">切换导航</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown messages-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: white;">
+                                <i class="fa fa-clock-o"></i>
+                                <span id="divT" class="hidden-xs"></span>
+                            </a>
+                        </li>
+                        <li class="dropdown messages-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: white;">
+                                <i class="fa  fa-calendar"></i>
+                                <span class="hidden-xs" th:text="${today}">2020-08-15</span>
+                            </a>
+                        </li>
+                        <!-- 你的信息-->
+                        <li class="dropdown messages-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="label label-success" th:text="${msgcount}">1</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header" th:text="'你有'+${msgcount}+'个消息'">消息</li>
+                                <li class="footer"><a href="javascript:void(0)" onclick="lookMessag(null)">看到所有的消息</a></li>
+                            </ul>
+                        </li>
+                        <!-- 个人信息 -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img th:src="@{/dist/img/{imageName}(imageName=${session.role.ImgUrl})}" class="user-image" alt="User Image">
+                                <span class="hidden-xs" th:text="${session.role.RoleName}"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="user-header">
+                                    <img th:src="@{/dist/img/{imageName}(imageName=${session.role.ImgUrl})}" class="img-circle" alt="User Image">
+                                    <p th:text="${session.role.RoleName}">
+                                        <small th:text="${session.role.RoleRemark}"></small>
+                                    </p>
+                                </li>
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="javascript:void(0)" onclick="IntoUserInfo()" class="btn btn-default btn-flat">个人信息</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="javascript:if(confirm('确定要退出吗?'))location=window.location.href.split('/')[0]+'logout'" class="btn btn-default btn-flat">退出</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="javascript:if(confirm('确定要退出吗?'))window.location.href='logout'"   style="color: white;">
+                                <i class="glyphicon glyphicon-off"></i>
+                                <span class="hidden-xs">退出s</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    </div>
+    <div th:fragment="NavMenu">
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <form method="get" class="sidebar-form" id="sidebar-form">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="搜索..." id="search-input">
+                        <span class="input-group-btn">
+                    <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+                    </div>
+                </form>
+                <ul class="sidebar-menu tree" data-widget="tree" th:each="menu:${session.menuVos}">
+                    <li th:id="${menu.Id}" th:class="${session.fid eq menu.Id ? 'treeview active':'treeview'}" style="height: auto;">
+                        <a href="#"><i class="${menu.MenuPic}"></i> <span><font style="vertical-align: inherit;"><font style="vertical-align: inherit;" th:text="${menu.MenuName}"></font></font></span>
+                            <span class="pull-right-container" >
+                              <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                    <ul class="treeview-menu" th:each="sub:${menu.subMenu}">
+                        <li th:id="${sub.Id}" th:class="${session.cid eq sub.Id ? 'active':''}">
+                        <a th:href="@{${sub.MenuUrl}}"   th:text="${sub.MenuName}">
+                                <i class="fa fa-circle-o">跳转</i></a>
+                        </li>
+                    </ul>
+                    </li>
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+    </div>
+
+    <div th:fragment="Navfooter">
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>版本号</b> 1.1.1
+            </div>
+            <strong>
+                Copyright &copy; 2015-2020 &nbsp;<a href="http://www.lh.com"> 武汉联合科技有限公司</a>&nbsp;&nbsp;
+                <a href="http://www.beianbeian.com/beianxinxi/837c0489-108a-41c8-9643-fa3033a30a9a.html">鄂ICP备15012490号-1</a>
+            </strong>
+        </footer>
+    </div>
+</body>
+<script type="text/javascript">
+    //当前系统时间
+    function getCurDate() {
+        var d = new Date();
+        var week;
+        switch (d.getDay()) {
+            case 1:
+                week = "周一";
+                break;
+            case 2:
+                week = "周二";
+                break;
+            case 3:
+                week = "周三";
+                break;
+            case 4:
+                week = "周四";
+                break;
+            case 5:
+                week = "周五";
+                break;
+            case 6:
+                week = "周六";
+                break;
+            default:
+                week = "周日";
+        }
+        var years = d.getFullYear();
+        var month = add_zero(d.getMonth() + 1);
+        var days = add_zero(d.getDate());
+        var hours = add_zero(d.getHours());
+        var minutes = add_zero(d.getMinutes());
+        var seconds = add_zero(d.getSeconds());
+        var ndate = years + "/" + month + "/" + days + " " + hours + ":" + minutes + ":" + seconds + " " + week;
+        divT.innerHTML = ndate;
+    }
+    setInterval("getCurDate()", 100);
+</script>
+<script type="text/javascript">
+
+    function IntoUserInfo(){
+        //重置表单 刷新页面
+        var myForm = document.createElement("form");
+        myForm.method = "post";
+        myForm.action ="IntoGetUserInfo.do";
+        var myInput = document.createElement("input");
+        myForm.appendChild(myInput);
+        document.body.appendChild(myForm);
+        myForm.submit();
+        document.body.removeChild(myForm);  // 提交后移除创建的form
+    }
+
+    function lookMessag(id,role_id){
+        var myForm = document.createElement("form");
+        myForm.method = "post";
+        myForm.action ="systemset/getMylatestNotice.do";
+        var myInput = document.createElement("input");
+        myInput.setAttribute("name", "id");  // 为input对象设置name
+        myInput.setAttribute("value", id);  // 为input对象设置
+        myForm.appendChild(myInput);
+        var myInput1 = document.createElement("input");
+        myInput1.setAttribute("name", "role_id");  // 为input对象设置name
+        myInput1.setAttribute("value", role_id);  // 为input对象设置
+        myForm.appendChild(myInput1);
+        document.body.appendChild(myForm);
+        myForm.submit();
+        document.body.removeChild(myForm);  // 提交后移除创建的form
+
+    }
+
+</script>
+</html>

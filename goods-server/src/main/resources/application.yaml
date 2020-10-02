@@ -1,0 +1,57 @@
+server:
+  port: 8828
+spring:
+  application:
+    name: goods-server
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/one_web?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: root
+    password: 111111q
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+  thymeleaf:
+    prefix: classpath:/templates
+    cache: false
+    mode: LEGACYHTML5
+    servlet:
+      content-type: text/html
+    suffix: .html
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      pool:
+        max-active: 8
+        max-wait: -1
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池中的最小空闲连接
+        min-idle: 0
+      #password: 111111q
+
+
+mybatis-plus:
+  mapper-locations: classpath:/com/web/mapper/xml/*.xml
+  #type-aliases-package: com.web.mapper
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
