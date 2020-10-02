@@ -15,6 +15,8 @@
     <modules>
         <module>goods-server</module>
         <module>eureka-server</module>
+        <module>goods-statistics</module>
+        <module>redis-server</module>
     </modules>
 
 

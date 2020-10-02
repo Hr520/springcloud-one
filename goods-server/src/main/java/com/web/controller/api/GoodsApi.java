@@ -11,10 +11,12 @@ import com.web.util.DateUtil;
 import com.web.util.General;
 import com.web.util.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -26,6 +28,8 @@ import java.util.Map;
 public class GoodsApi extends BaseController {
     @Autowired
     private GoodsService goodsService;
+    @Resource
+    private KafkaTemplate<String,String> kafkaTemplate;
 
     @PostMapping("addGoods")
     public ResponseEntity<?> addGoods(Goods goods){
@@ -44,6 +48,7 @@ public class GoodsApi extends BaseController {
         if (goods.getSort()==null) goods.setSort(1);
         boolean flag=goodsService.addGoods(goods);
         if (flag){
+            kafkaTemplate.send("my-topic", "addGoods", JSON.toJSONString(goods));
             return new ResponseEntity<>().setState(General.SUCCESS).setMsg("新增成功");
         }else {
             return new ResponseEntity<>().setState(General.ERROR_0000).setMsg("新增失败");

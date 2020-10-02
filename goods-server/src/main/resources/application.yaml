@@ -32,17 +32,32 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
-    redis:
-      host: 127.0.0.1
-      port: 6379
-      pool:
-        max-active: 8
-        max-wait: -1
-        # 连接池中的最大空闲连接
-        max-idle: 8
-        # 连接池中的最小空闲连接
-        min-idle: 0
+
+    pool:
+      max-active: 8
+      max-wait: -1
+      # 连接池中的最大空闲连接
+      max-idle: 8
+      # 连接池中的最小空闲连接
+      min-idle: 0
       #password: 111111q
+  ##########################################kafka 服务配置
+  kafka:
+    bootstrap-servers: 192.168.111.108:9092
+    producer:
+      acks: 1
+      batch-size: 16384
+      retries: 0
+      buffer-memory: 33554432
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  ##########################consumer about config##############################
+    consumer:
+      enable-auto-commit: true
+      group-id: test-consumer-group
+      auto-commit-interval: 100
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 
 mybatis-plus:
@@ -54,4 +69,8 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+
+
+
+
 
