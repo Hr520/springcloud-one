@@ -19,11 +19,19 @@ public class GoodsUpdateListener {
     @Autowired
     private GoodsReportService goodsReportService;
 
-    @KafkaListener(topics = {"my-topic"})
+    @KafkaListener(topics = {"kafkaTest"})
     public void listen(ConsumerRecord<?, ?> record) {
         GoodsReport goodsReport=new GoodsReport();
+        Integer today=Integer.parseInt(DateUtil.getDays());
         //查看今日报表是否已经生产
-        int count =goodsReportService.getTodayReportIsLive(Integer.parseInt(DateUtil.getDays()));
+        int count =goodsReportService.getTodayReportIsLive(today);
+        if (count>0){
+            goodsReportService.updateGoodsReportToday(count,today);
+        }else {
+            goodsReport.setNewGoods(1);
+            goodsReport.setNowDate(today);
+            goodsReportService.insertGoodsReport(goodsReport);
+        }
         Optional<?> kafkaMessage = Optional.ofNullable(record.value());
         if (kafkaMessage.isPresent()) {
             Object message = kafkaMessage.get();

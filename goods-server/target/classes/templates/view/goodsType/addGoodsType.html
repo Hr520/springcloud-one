@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <base th:href="${#request.getContextPath()}+'/'">
+    <title>添加货品</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="/dist/css/skins/_all-skins.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrapValidator.css">
+    <link rel="stylesheet" href="/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" />
+</head>
+<body class="hold-transition skin-green-light sidebar-mini">
+    <div class="wrapper">
+        <!-- head and menu -->
+        <div th:replace="/mycommon :: Header"></div>
+        <div th:replace="/mycommon :: NavMenu"></div>
+        <!-- head and menu -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    货品管理  <small>添加货品分类</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="main/index"><i class="fa fa-dashboard"></i>主页</a></li>
+                    <li><a href="javascript:;">货品管理</a></li>
+                    <li class="active">添加货品分类</li>
+                </ol>
+            </section>
+            <section class="content">
+                <div class="box">
+                    <div class="box-header">
+                        <form role="form" class="form-horizontal" id="AddGoodsTypeForm" method="post">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">货品分类名称：</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" placeholder="货品分类名称小于20个字符" id="ClassificationName"  name="ClassificationName" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">状态：</label>
+                                <div class="col-sm-6">
+                                    <div class="radio">
+                                        <label><input type="radio" name="status"  value="1" checked="checked">启用</label>&nbsp;
+                                        <label><input type="radio"  name="status"  value="0" >禁用</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">排序：</label>
+                                <div class="col-sm-6">
+                                    <input type="number" class="form-control" id="sort" name="sort" value=""/>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">保存</button>
+                                <button type="button" class="btn btn-default" id="returnPage" >返回</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!--Footer-part-->
+        <footer class="main-footer" th:replace="/mycommon :: Navfooter">
+        </footer>
+        <!--end-Footer-part-->
+    </div>
+    <!-- jQuery 2.2.3 -->
+    <!-- jQuery 2.2.3 -->
+    <script src="/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Slimscroll -->
+    <script src="/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="/plugins/fastclick/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/dist/js/app.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="/dist/js/demo.js"></script>
+    <!-- Table Valid -->
+    <script src="/bootstrap/js/bootstrapValidator.js"></script>
+    <!-- 本地语言化 -->
+    <script src="/plugins/bootstrap-datetimepicker/js/moment-with-locales.js"></script>
+    <!-- bootstrap-datetimepicker -->
+    <script src="/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).delegate("button#returnPage", "click", function () {
+            returnPage();
+        });
+        function returnPage() {
+            window.location.href="goodsType/JumpGoodsTypeList";
+        }
+    </script>
+<script type="text/javascript">
+    $(function () {
+        $('#AddGoodsTypeForm').bootstrapValidator({
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                ClassificationName: {
+                    validators: {
+                        notEmpty: {message: '货品分类名称不可为空'},
+                        stringLength: {
+                            max: 20,
+                            message: '货品分类名称不可超过20个字符'
+                        },
+                        remote: {
+                            url: 'goodsTypeApi/ClassificationNameValid',
+                            message: '货品分类名称已存在',
+                            delay :  2000,
+                            type: 'POST',
+                            data: {
+                                ClassificationName: $.trim($('input[name="ClassificationName"]').val())
+                            }
+                        }
+                    }
+                },
+                status: {
+                    validators: {
+                        notEmpty: {message: '状态不可为空'}
+                    }
+                },
+                sort: {
+                    validators: {
+                        notEmpty: {message: '排序不可为空'},
+                        regexp: {
+                            //正则校验
+                            regexp: /^[1-9]\d*$/,
+                            message: '必须为正整数'
+                        }
+                    }
+                }
+            }
+        }).on('success.form.bv', function (e) {
+            e.preventDefault();
+        });
+        $("#AddGoodsTypeForm").submit(function(e){
+            var $form = $(e.target);
+            var bv = $form.data('bootstrapValidator');
+            bv.validate();
+            if(bv.isValid()){
+              lin="goodsTypeApi/addGoodsType";
+                $.post(lin, $form.serialize(), function (data) {
+                    if(data.state=='0000'){
+                        alert(data.msg);
+                        flush();
+                    }
+                }, 'json');
+            }
+        });
+    });
+
+    function flush(){
+        window.location.href="goodsType/JumpAddGoodsType";
+    }
+</script>
+</body>
+</html>

@@ -7,9 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.web.base.BaseController;
 import com.web.entity.Goods;
 import com.web.service.GoodsService;
-import com.web.util.DateUtil;
-import com.web.util.General;
-import com.web.util.ResponseEntity;
+import com.web.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -32,7 +31,9 @@ public class GoodsApi extends BaseController {
     private KafkaTemplate<String,String> kafkaTemplate;
 
     @PostMapping("addGoods")
-    public ResponseEntity<?> addGoods(Goods goods){
+    public ResponseEntity<?> addGoods(Goods goods, HttpServletRequest request){
+        String ip=CusAccessObjectUtil.getIpAddr(request);
+        String data= AddressUtils.getAddresses(ip);
         goods.setUuid(idWorker.nextId());
         goods.setAddDate(DateUtil.getDay());
         String time=DateUtil.getTime();
@@ -48,7 +49,7 @@ public class GoodsApi extends BaseController {
         if (goods.getSort()==null) goods.setSort(1);
         boolean flag=goodsService.addGoods(goods);
         if (flag){
-            kafkaTemplate.send("my-topic", "addGoods", JSON.toJSONString(goods));
+            kafkaTemplate.send("kafkaTest", "addGoods", JSON.toJSONString(goods));
             return new ResponseEntity<>().setState(General.SUCCESS).setMsg("新增成功");
         }else {
             return new ResponseEntity<>().setState(General.ERROR_0000).setMsg("新增失败");
@@ -112,7 +113,6 @@ public class GoodsApi extends BaseController {
         Integer state=1;
         String extra_search=jsonObject.get("extra_search")==null ? "":jsonObject.get("extra_search").toString();
         extra_search = URLDecoder.decode(extra_search, "UTF-8");
-
         IPage<Goods> GoodsListPage = goodsService.GoodsListPage(goodsPage, state,extra_search);
         return GoodsListPage;
     }

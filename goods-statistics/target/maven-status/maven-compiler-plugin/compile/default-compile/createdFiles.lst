@@ -1,0 +1,8 @@
+goods\statistics\server\listener\GoodsUpdateListener.class
+goods\statistics\server\Entity\GoodsReport.class
+goods\statistics\server\GoodsStatisticsServerApplication.class
+goods\statistics\server\mapper\GoodsReportMapper.class
+goods\statistics\server\util\DateUtil.class
+goods\statistics\server\service\impl\GoodsReportServiceImpl.class
+goods\statistics\server\config\MybatisPlusConfig.class
+goods\statistics\server\service\GoodsReportService.class

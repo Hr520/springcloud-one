@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <base th:href="${#request.getContextPath()}+'/'">
+    <title>实验分组列表</title>
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/dist/css/skins/_all-skins.css">
+    <!-- TABLE style -->
+    <link rel="stylesheet" href="/assets/css/backend.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css">
+    <style type="text/css">
+        /* DataTables禁用排序后，屏蔽排序图标占用的位置 */
+        table.dataTable thead > tr > th {
+            padding-right: 8px;
+        }
+        .table {
+            table-layout: fixed;/*列宽由表格宽度和列宽度设定 */
+        }
+        /*td文字过长省略号表示 */
+        .table tr td {
+            text-overflow: ellipsis; /* for IE */
+            -moz-text-overflow: ellipsis; /* for Firefox,mozilla */
+            overflow: hidden;
+            white-space: nowrap;/* 不自动换行 */
+        }
+    </style>
+</head>
+<body class="hold-transition skin-green-light sidebar-mini">
+    <div class="wrapper">
+        <!-- head and menu -->
+        <div th:replace="/mycommon :: Header"></div>
+        <div th:replace="/mycommon :: NavMenu"></div>
+        <!-- head and menu -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    货品管理  <small>商品分类列表</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="main/index"><i class="fa fa-dashboard"></i>主页</a></li>
+                    <li><a href="javascript:;">货品管理</a></li>
+                    <li class="active">货品分类列表</li>
+                </ol>
+            </section>
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <form role="form" class="form-horizontal" id="queryForm" method="post">
+                                    <button type="button" class="btn btn-primary" id="JumpAddGoodsType"  th:title="添加货品分类">
+                                        <i class="fa fa-plus"></i> 添加
+                                    </button>
+                                </form>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <table id="example" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th>货品分类名称</th>
+                                        <th>排序</th>
+                                        <th>状态</th>
+                                        <th>日期</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </section>
+        </div>
+        <!--Footer-part-->
+        <footer class="main-footer" th:replace="/mycommon :: Navfooter">
+        </footer>
+        <!--end-Footer-part-->
+    </div>
+    <!-- jQuery 2.2.3 -->
+    <script src="/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="/plugins/fastclick/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/dist/js/app.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="/dist/js/demo.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
+                "language": {
+                    "url": '/plugins/datatables/Chinese.json'
+                },
+                retrieve: true,
+                paging: true,
+                ordering: false,
+                info: true,
+                autoWidth: false,
+                pageLength: 10,//每页显示10条数据
+                pagingType: "full_numbers", //分页样式：simple,simple_numbers,full,full_numbers，
+                //bFilter: false, //去掉搜索框方法
+                bLengthChange: true,//也就是页面上确认是否可以进行选择一页展示多少条
+                serverSide: true, //启用服务器端分页，要进行后端分页必须的环节
+                ajax: function (data,callback,settings) {
+                    //封装相应的请求参数，这里获取页大小和当前页码
+                    var pagesize = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候,页大小
+                    var start = data.start;//开始的记录序号
+                    var page = (data.start) / data.length + 1;//当前页码
+                    var i= $.trim($("#example_filter").find("input").val())
+                    var extra_search=encodeURI(i)
+                    var data = {
+                        page: page,
+                        pagesize: pagesize,//这里只传了当前页和页大小，如果有其他参数，可继续封装
+                        extra_search:extra_search,
+                    }
+                    var json={
+                        dataArray:JSON.stringify(data)
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: "/goodsTypeApi/goodsTypeListPage",
+                        cache : false,  //禁用缓存
+                        //传入已封装的参数
+                        data:json,
+                        dataType: "json",//返回数据格式为json
+                        success: function(data) {
+                            var arr = "";
+                            if ('object' == typeof data) {
+                                arr = data;
+                            } else {
+                                arr = $.parseJSON(data);//将json字符串转化为了一个Object对象
+                            }
+                           /* console.log("============数据==========")
+                            console.log(arr)*/
+                            var returnData = {};
+                            //returnData.draw = arr.data.pagination.pageCount;//这里直接自行返回了draw计数器,应该由后台返回，没什么卵用！
+                            returnData.recordsTotal = arr.total;//totalCount指的是总记录数
+                            returnData.recordsFiltered = arr.total;//后台不实现过滤功能,全部的记录数都需输出到前端，记录数为总数
+                            returnData.data = arr.records;//返回汽车列表
+                       /*     console.log("======returnData.data=======")
+                            console.log(returnData.recordsTotal)
+                            console.log(returnData.recordsFiltered)*/
+                            callback(returnData);//这个别忘了！！！
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            $.dialog.alert("查询失败");
+                            $wrapper.spinModal(false);
+                        }
+                    });
+                },
+                "columns": [
+                    { "data": "classificationName"},
+                    { "data": "sort"},
+                    { "data": "status" },
+                    {"data": "addTime"},
+                    { "data": null }
+                ],
+                "columnDefs": [
+                    {"defaultContent": '', "targets": ['_all']},
+                    {
+                        "orderable": false,
+                        "className": "my_class",
+                        "targets": [0,1,2,3,4]
+                    },
+                    {// 对第10列内容进行替换处理
+                        "targets": 2,
+                        "render": function (data, type, row, meta) {
+                            if (data == "1") {
+                                return "&nbsp;<span class='label label-success'>有效</span>";
+                            }
+                            if (data == "0") {
+                                return "&nbsp;<span class='label label-danger'>无效</span>";
+                            }
+                        }
+                    },
+                ],
+                "rowCallback": function( row, data, index ) {
+                    $('td:eq(4)', row).html('<a href="javascript:;" class="btn btn-success btn-editone btn-xs"  onclick="editGoodsType('+data.id+')" title="编辑">&nbsp;<i class="fa fa-pencil"></i>&nbsp;</a>&nbsp;'
+                        +'<a href="javascript:;" class="btn btn-danger btn-delone btn-xs" onclick="delGoodsType('+data.id+')" title="删除">&nbsp;<i class="fa fa-trash"></i>&nbsp;</a>');
+                }
+            });
+            // 添加序号
+            table.on('order.dt search.dt', function() {
+                table.column(0, {
+                    search : 'applied',
+                    order : 'applied'
+                }).nodes().each(function(cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).delegate("button#JumpAddGoodsType", "click", function () {
+            JumpAddGoodsType();
+        });
+        function JumpAddGoodsType(){
+            window.location.href="goodsType/JumpAddGoodsType";
+        }
+        function delGoodsType(id){
+            if (confirm("确认删除吗？数据将永久删除！")) {
+                $.post("goodsTypeApi/delGoodsType", {"id":id}, function(data) {
+                    if (data.state == '0000') {
+                        alert(data.msg);
+                        loadJumpPage("goodsType/JumpGoodsTypeList");
+                    } else if (data.state == "1001") {
+                        alert(data.msg);
+                    } else {
+                        alert("失败，请重试!");
+                    }
+                }, 'json');
+            }
+        }
+
+        function loadJumpPage(Url) {
+        window.location.href=Url;
+        }
+    </script>
+</body>
+</html>
