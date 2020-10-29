@@ -73,6 +73,13 @@
             <version>3.3.2</version>
             <scope>compile</scope>
         </dependency>
+
+        <!--spring AOP-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

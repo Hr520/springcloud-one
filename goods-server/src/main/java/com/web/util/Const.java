@@ -24,7 +24,7 @@ public class Const {
 	public static final String LOGIN = "/login"; // 登录地址
 	public static final String WechatCode="openId";//微信用户的openid
     public static final String WechatUSERID="user_id";//微信用户的user_id
-	public static final String NO_INTERCEPTOR_PATH = ".*/((login)|(assets)|(bootstrap)|(build)|(dist)|(plugins)|(upload)|(logout)|(code)|(Jquery)|(api)|(main)|(interface)|(weixin)|(api)).*"; // 不对匹配该值的访问路径拦截（正则）
+	public static final String NO_INTERCEPTOR_PATH = ".*/((login)|(assets)|(bootstrap)|(build)|(dist)|(plugins)|(upload)|(logout)|(code)|(Jquery)|(api)|(main)|(interface)|(weixin)|(feign-consumer)).*"; // 不对匹配该值的访问路径拦截（正则）
 	public static ApplicationContext WEB_APP_CONTEXT = null; // 该值会在web容器启动时由WebAppContextListener初始化
 	public  static  final  String White_IP=".*((localhost)|(127.0.0.1)|(172.16.3)|(210.42.109.72)|(te.m.hust.edu.cn)).*";
 

@@ -17,6 +17,7 @@
         <module>eureka-server</module>
         <module>goods-statistics</module>
         <module>redis-server</module>
+        <module>wechat-server</module>
     </modules>
 
 

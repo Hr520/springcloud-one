@@ -17,6 +17,7 @@ public class LoginConfig implements WebMvcConfigurer {
                 "/login",            //登录
                 "/code",
                 "/userLogin/toLogin",            //登录请求放过
+                "/cs/feign-consumer",
                 "/**/*.html",            //html静态资源
                 "/**/*.js",              //js静态资源
                 "/**/*.css",             //css静态资源

@@ -9,6 +9,7 @@ D:\java_code\springCloud_One\goods-server\src\main\java\com\web\util\StringTool.
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\service\UserRoleService.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\util\General.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\entity\CustomerIntegralLog.java
+D:\java_code\springCloud_One\goods-server\src\main\java\com\web\util\AddressUtils.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\entity\OrderInfo.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\util\FileUtil.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\entity\UserRole.java
@@ -34,6 +35,7 @@ D:\java_code\springCloud_One\goods-server\src\main\java\com\web\service\impl\Goo
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\Thread\ThreadClass.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\util\MD5.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\controller\system\SystemRoleController.java
+D:\java_code\springCloud_One\goods-server\src\main\java\com\web\controller\api\GoodsTypeApi.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\util\HttpRequestUtils.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\service\UserRoleMenuService.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\controller\api\RoleApi.java
@@ -44,6 +46,7 @@ D:\java_code\springCloud_One\goods-server\src\main\java\com\web\controller\syste
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\mapper\RoleMapper.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\util\SecurityUtil.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\service\impl\MenuServiceImpl.java
+D:\java_code\springCloud_One\goods-server\src\main\java\com\web\controller\api\CustomerController.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\entity\RoleMenu.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\util\FileUpload.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\util\IdWorker.java
@@ -66,6 +69,7 @@ D:\java_code\springCloud_One\goods-server\src\main\java\com\web\util\FileDownloa
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\filter\MybatisPlusConfig.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\util\JsMd5Decode.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\controller\system\LoginController.java
+D:\java_code\springCloud_One\goods-server\src\main\java\com\web\controller\system\GoodsTypeController.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\entity\Customer.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\mapper\GoodsMapper.java
 D:\java_code\springCloud_One\goods-server\src\main\java\com\web\mapper\SystemUserMapper.java

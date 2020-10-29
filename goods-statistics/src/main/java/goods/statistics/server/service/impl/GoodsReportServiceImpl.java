@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 
 @Service
 public class GoodsReportServiceImpl implements GoodsReportService {
+
     @Resource
     private GoodsReportMapper goodsReportMapper;
     @Override
